@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowd Insights</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+    <script>
+        let map;
+        function initMap() {
+            const mapCenter = [34.810184, 135.5610037]; // Ritsumeikan University
+
+            if (map) {
+                map.remove();
+            }
+
+            map = L.map('map').setView(mapCenter, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            L.marker(mapCenter).addTo(map)
+                .bindPopup("Ritsumeikan University: {{ count }} people")
+                .openPopup();
+        }
+
+        // Reload the page every 5 minutes
+        setInterval(function () {
+            location.reload();
+        }, 300000);
+    </script>
+</head>
+<body onload="initMap()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Crowd Insights</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Live People Count</h1>
+                <div id="map" class="mt-4"></div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2>Tracked Locations</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Ritsumeikan University</strong>: {{ count }} people
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
